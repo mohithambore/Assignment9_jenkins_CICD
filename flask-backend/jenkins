@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Pull Latest Code') {
+            steps {
+                sh '''
+                sudo -u ubuntu bash -c "cd /home/ubuntu/Assignment8_Terraform_AWS && git pull origin main"
+                '''
+            }
+        }
+
+        stage('Install Flask Dependencies') {
+            steps {
+                sh '''
+                sudo -u ubuntu bash -c "cd /home/ubuntu/Assignment8_Terraform_AWS/flask-backend && venv/bin/pip install -r requirements.txt"
+                '''
+            }
+        }
+
+        stage('Restart Flask App') {
+            steps {
+                sh '''
+                sudo -u ubuntu bash -c "pm2 restart flask-backend && pm2 list"
+                '''
+            }
+        }
+    }
+}
